@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const response = NextResponse.next();
+  const origin = req.headers.get("origin");
 
-  // Allow both Vercel frontend and local dev
   const allowedOrigins = [
     "https://ems-frontend-murex.vercel.app",
     "http://localhost:5173",
   ];
 
-  const origin = req.headers.get("origin");
+  const response = NextResponse.next();
+
   if (allowedOrigins.includes(origin)) {
     response.headers.set("Access-Control-Allow-Origin", origin);
   }
@@ -24,16 +24,18 @@ export function middleware(req) {
     "Content-Type, Authorization"
   );
 
-  // Handle preflight (OPTIONS) request
   if (req.method === "OPTIONS") {
     return new NextResponse(null, {
       status: 200,
       headers: {
-        "Access-Control-Allow-Origin": origin && allowedOrigins.includes(origin) ? origin : "",
+        "Access-Control-Allow-Origin": allowedOrigins.includes(origin)
+          ? origin
+          : "",
         "Access-Control-Allow-Credentials": "true",
         "Access-Control-Allow-Methods":
           "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization",
       },
     });
   }
