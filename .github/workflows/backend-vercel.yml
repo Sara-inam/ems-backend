@@ -23,10 +23,18 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel
 
+      # 🔹 Debug step to check the branch and environment
+      - name: Debug branch info
+        run: |
+          echo "Branch detected: $GITHUB_REF"
+          echo "Workflow triggered by actor: $GITHUB_ACTOR"
+
       - name: Deploy to Vercel
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            echo "Deploying to production..."
             vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
           else
+            echo "Deploying to preview..."
             vercel --token=${{ secrets.VERCEL_TOKEN }}
           fi
