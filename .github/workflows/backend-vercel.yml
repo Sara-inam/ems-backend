@@ -3,13 +3,13 @@ name: Next.js Deploy to Vercel
 on:
   push:
     branches:
-      - development
-      - qa
-      - main
+      - production
+      - preview
+      
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestgit
 
     steps:
       - name: Checkout code
