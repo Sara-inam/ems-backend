@@ -12,4 +12,3 @@ export const generateToken = (payload) => {
     }
   );
 };
-//commit
